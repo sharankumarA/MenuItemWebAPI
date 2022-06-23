@@ -1,0 +1,34 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: menuitemwebapi-deployment
+  labels:
+    app: MenuItemWebApi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+        app: MenuItemWebApi
+  template: 
+    metadata: 
+        labels: 
+            app: MenuItemWebApi
+    spec: 
+        containers: 
+        - name: cloudpracticecheckmenuitem
+          image: cloudpracticecheck.azurecr.io/cloudpracticecheckmenuitem:latest
+          ports: 
+          - containerPort: 8080
+        imagePullSecrets:
+        - name: webapisvcsecret
+---
+apiVersion: v1
+kind: Service
+metadata: 
+    name: menuitemwebapiservice
+spec: 
+    type: LoadBalancer
+    ports: 
+    - port: 80
+    selector:
+        app : MenuItemWebApi
